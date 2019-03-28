@@ -1,4 +1,4 @@
-# 简介
+﻿# 简介
 
   * 后端基于 SpringBoot，Mybatis-plus，Shiro，JWT
   * 前端采用Vue & Ant Design
@@ -21,7 +21,7 @@
     
     注：关于maven启动入口可参考 https://blog.csdn.net/qbg19881206/article/details/19850857 ,适用单元测试
     
-  * 启动前台：执行npm install && npm run dev,访问http://localhost:3000/ 即可访问站点，默认登录帐号密码admin/admin
+  * 启动前台：执行npm install && npm run serve,访问http://localhost:3000/ 即可访问站点，默认登录帐号密码admin/admin
     注：通过npm install全局安装依赖webpack与vue-cli 3.2.1,确保版本支持即可，vue-cli安装参考https://cli.vuejs.org/zh/guide/installation.html
     若出现问题建议把node_module目录删除后重新安装依赖包
   
