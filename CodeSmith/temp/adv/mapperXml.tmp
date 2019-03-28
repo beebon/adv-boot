@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="{{cfg['package']}}.{{cfg['bizDir']}}.mapper.{{m['name']}}Mapper">
+	<sql id="Base_Column_List">
+    {% for item in m['cols'] %}t.{{ item['name']}} as {{ item['name']|smallCamel }},{% endfor %} -1
+  	</sql>
+
+	<select id="listInPage" parameterType="java.util.Map" resultType="java.util.Map">
+        select <if test="totalCount != null">count(*) as total</if>
+                <if test="totalCount == null"><include refid="Base_Column_List"></include></if>
+        from {{m['table']}} t
+        WHERE 1=1
+        {% for item in m['cols'] %}
+        	<if test="{{ item['name']|smallCamel }} != null"> and t.{{ item['name'] }}='${ {{ item['name']|smallCamel }} }'</if>
+    	{% endfor %}
+      <if test="totalCount == null">limit ${page*pageSize-pageSize} , ${pageSize}</if>
+    </select>
+</mapper>

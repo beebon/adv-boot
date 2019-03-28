@@ -1,0 +1,16 @@
+package {{cfg['package']}}.{{cfg['bizDir']}}.service;
+
+import {{cfg['package']}}.{{cfg['bizDir']}}.entity.{{m['name']}};
+import com.baomidou.mybatisplus.extension.service.IService;
+import java.util.Map;
+
+/**
+ * @Title: {{m['name']}} service interface
+ * @Description: {{m['comment']}}
+ * @author： {{cfg.author}}
+ * @date：   {{common.now}}
+ * @version： {{cfg.version}}
+ */
+public interface I{{m['name']}}Service extends IService<{{m['name']}}> {
+	Map<String,Object> listInPage(Map<String,Object> param);
+}

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.adv.modules.app.mapper.AppTaskMapper">
+
+    <sql id="Base_Column_List">
+    t.id as id,t.name as name,t.status as status,t.platform_id as platformId,t.task_type as taskType,t.task_sum as taskSum,t.receive_num as receiveNum,t.complete_num as completeNum,t.created_by as createdBy,t.updated_by as updatedBy,t.create_time as createTime,t.update_time as updateTime,t.min_bonus as minBonus,t.max_bonus as maxBonus,t.bonus as bonus,
+    ap.name as platformName,sdi.item_text as taskTypeName
+  	</sql>
+
+    <select id="listInPage" parameterType="java.util.Map" resultType="java.util.Map">
+        select <if test="totalCount != null">count(*) as total</if>
+        <if test="totalCount == null"><include refid="Base_Column_List"></include></if>
+        from app_task t
+        left join app_platform ap on t.platform_id=ap.id
+        left join sys_dict_item sdi on t.task_type=sdi.item_value
+        WHERE 1=1
+
+        <if test="id != null"> and id='${ id }'</if>
+
+        <if test="name != null"> and name='${ name }'</if>
+
+        <if test="status != null"> and status='${ status }'</if>
+
+        <if test="platformId != null"> and platform_id='${ platformId }'</if>
+
+        <if test="taskType != null"> and task_type='${ taskType }'</if>
+
+        <if test="taskSum != null"> and task_sum='${ taskSum }'</if>
+
+        <if test="receiveNum != null"> and receive_num='${ receiveNum }'</if>
+
+        <if test="completeNum != null"> and complete_num='${ completeNum }'</if>
+
+        <if test="createdBy != null"> and created_by='${ createdBy }'</if>
+
+        <if test="updatedBy != null"> and updated_by='${ updatedBy }'</if>
+
+        <if test="createTime != null"> and create_time='${ createTime }'</if>
+
+        <if test="updateTime != null"> and update_time='${ updateTime }'</if>
+
+        <if test="minBonus != null"> and min_bonus='${ minBonus }'</if>
+
+        <if test="maxBonus != null"> and max_bonus='${ maxBonus }'</if>
+
+        <if test="bonus != null"> and bonus='${ bonus }'</if>
+
+        <if test="totalCount == null">limit ${page*pageSize-pageSize} , ${pageSize}</if>
+    </select>
+
+</mapper>

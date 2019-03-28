@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.adv.modules.app.mapper.AppUserTaskMapper">
+	<sql id="Base_Column_List">
+    t.id as id,t.task_id as taskId,t.user_id as userId,t.app_version as appVersion,t.task_status as taskStatus,t.receive_time as receiveTime,t.complete_time as completeTime,t.bonus as bonus, -1
+  	</sql>
+
+	<select id="listInPage" parameterType="java.util.Map" resultType="java.util.Map">
+        select <if test="totalCount != null">count(*) as total</if>
+                <if test="totalCount == null"><include refid="Base_Column_List"></include></if>
+        from app_user_task t
+        WHERE 1=1
+        
+        	<if test="id != null"> and t.id='${ id }'</if>
+    	
+        	<if test="taskId != null"> and t.task_id='${ taskId }'</if>
+    	
+        	<if test="userId != null"> and t.user_id='${ userId }'</if>
+    	
+        	<if test="appVersion != null"> and t.app_version='${ appVersion }'</if>
+    	
+        	<if test="taskStatus != null"> and t.task_status='${ taskStatus }'</if>
+    	
+        	<if test="receiveTime != null"> and t.receive_time='${ receiveTime }'</if>
+    	
+        	<if test="completeTime != null"> and t.complete_time='${ completeTime }'</if>
+    	
+        	<if test="bonus != null"> and t.bonus='${ bonus }'</if>
+    	
+      <if test="totalCount == null">limit ${page*pageSize-pageSize} , ${pageSize}</if>
+    </select>
+</mapper>

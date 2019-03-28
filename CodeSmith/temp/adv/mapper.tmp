@@ -1,0 +1,20 @@
+package {{cfg['package']}}.{{cfg['bizDir']}}.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import {{cfg['package']}}.{{cfg['bizDir']}}.entity.{{m['name']}};
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Title: {{m['name']}} mapper
+ * @Description: {{m['comment']}}
+ * @author： {{cfg.author}}
+ * @date：   {{common.now}}
+ * @version： {{cfg.version}}
+ */
+public interface {{m['name']}}Mapper extends BaseMapper<{{m['name']}}> {
+	List listInPage(Map<String, Object> param);
+}

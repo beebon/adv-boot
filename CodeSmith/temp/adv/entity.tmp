@@ -1,0 +1,27 @@
+package org.adv.modules.app.entity;
+
+import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+/**
+ * @Title: {{m['name']}} entity
+ * @Description: {{m['comment']}}
+ * @author： {{cfg.author}}
+ * @date：   {{common.now}}
+ * @version： {{cfg.version}}
+ */
+@Data
+@TableName("{{m['table']}}")
+public class {{m['name']}} implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    {% for item in m['cols'] %}
+    {% if item['name']=='id' %}@TableId(type = IdType.UUID){% endif %}{% if item['type']|getFieldType =='DATE' or item['type']|getFieldType =='DATETIME' %}
+    @com.fasterxml.jackson.annotation.JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    @org.springframework.format.annotation.DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss"){% endif %}
+    private {{ item['type']|getFieldMapType }} {{ item['name']|smallCamel }}; //{{ item['comment'] }}
+    {% endfor %}
+}

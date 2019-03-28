@@ -1,0 +1,131 @@
+<template>
+  <a-modal
+    :title="title"
+    :width="800"
+    :visible="visible"
+    :confirmLoading="confirmLoading"
+    @ok="handleOk"
+    @cancel="handleCancel"
+    cancelText="关闭">
+    
+    <a-spin :spinning="confirmLoading">
+      <a-form :form="form">
+      {% for item in m['cols'] %}{% if item['name']!='id' %}
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="{{ item['comment'] }}">
+          {% if item['type']|getFieldType =='DATE' %}<a-date-picker v-decorator="[ '{{ item['name']|smallCamel }}', {% if not item['nullable'] %}validatorRules.{{ item['name']|smallCamel }} {%else%}{}{%endif%}]" />{% endif %}
+          {% if item['type']|getFieldType =='DATETIME' %}
+          <a-date-picker showTime format='YYYY-MM-DD HH:mm:ss' v-decorator="[ '{{ item['name']|smallCamel }}', {% if not item['nullable'] %}validatorRules.{{ item['name']|smallCamel }} {%else%}{}{%endif%}]" />{% endif %}
+          {% if item['type']|getFieldType in ['BIGINT','INTEGER','DECIMAL'] %} 
+          <a-input-number v-decorator="[ '{{ item['name']|smallCamel }}', {% if not item['nullable'] %}validatorRules.{{ item['name']|smallCamel }} {%else%}{}{%endif%}]" />{% else %}<a-input placeholder="请输入{{ item['comment'] }}" v-decorator="['{{ item['name']|smallCamel }}',  {% if not item['nullable'] %}validatorRules.{{ item['comment']|smallCamel }} {%else%}{}{%endif%}]" />{% endif %}
+        </a-form-item>
+      {% endif %}{% endfor %}
+      </a-form>
+    </a-spin>
+  </a-modal>
+</template>
+
+<script>
+  import { httpAction } from '@/api/manage'
+  import pick from 'lodash.pick'
+  import moment from "moment"
+
+  export default {
+    name: "{{ m['name'] }}Modal",
+    data () {
+      return {
+        title:"操作",
+        visible: false,
+        model: {},
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 5 },
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 16 },
+        },
+        confirmLoading: false,
+        form: this.$form.createForm(this),
+        validatorRules:{ {% for item in m['cols'] %}{% if item['name']!='id' and not item['nullable'] %}
+        {{ item['name']|smallCamel }}:{rules: [{ required: true, message: '请输入{{ item['comment'] }}!' }]},{% endif %}{% endfor %}
+        },
+        url: {
+          add: "/{{cfg['bizDir']}}/{{m['table']|smallCamel}}/add",
+          edit: "/{{cfg['bizDir']}}/{{m['table']|smallCamel}}/edit",
+        },
+      }
+    },
+    created () {
+    },
+    methods: {
+      add () {
+        this.edit({});
+      },
+      edit (record) {
+        this.form.resetFields();
+        this.model = Object.assign({}, record);
+        this.visible = true;
+        this.$nextTick(() => {
+          this.form.setFieldsValue(pick(this.model{% for item in m['cols'] %}{% if item['name']!='id' and item['type']|getFieldType!='DATE' %},'{{ item['name']|smallCamel }}'{% endif %}{% endfor %}))
+          {% for item in m['cols'] %}{% if item['name']!='id' and item['type']|getFieldType=='DATE' %}
+          //时间格式化
+          this.form.setFieldsValue({ {{ item['name']|smallCamel }}:this.model.{{ item['name']|smallCamel }}?moment(this.model.{{ item['name']|smallCamel }}):null })
+          {% endif %}{% endfor %}
+        });
+
+      },
+      close () {
+        this.$emit('close');
+        this.visible = false;
+      },
+      handleOk () {
+        const that = this;
+        // 触发表单验证
+        this.form.validateFields((err, values) => {
+          if (!err) {
+            that.confirmLoading = true;
+            let httpurl = '';
+            let method = '';
+            if(!this.model.id){
+              httpurl+=this.url.add;
+              method = 'post';
+            }else{
+              httpurl+=this.url.edit;
+               method = 'put';
+            }
+            let formData = Object.assign(this.model, values);
+            {% for item in m['cols'] %}{% if item['name']!='id' and item['type']|getFieldType=='DATE' %}
+            //时间格式化
+            formData.{{ item['name']|smallCamel }} = formData.{{ item['name']|smallCamel }}?formData.{{ item['name']|smallCamel }}.format():null;{% elif item['name']!='id' and item['type']|getFieldType =='DATETIME' %}
+            formData.{{ item['name']|smallCamel }} = formData.{{ item['name']|smallCamel }}?formData.{{ item['name']|smallCamel }}.format('YYYY-MM-DD HH:mm:ss'):null;{% endif %}{% endfor %}
+            
+            console.log(formData)
+            httpAction(httpurl,formData,method).then((res)=>{
+              if(res.success){
+                that.$message.success(res.message);
+                that.$emit('ok');
+              }else{
+                that.$message.warning(res.message);
+              }
+            }).finally(() => {
+              that.confirmLoading = false;
+              that.close();
+            })
+
+
+
+          }
+        })
+      },
+      handleCancel () {
+        this.close()
+      },
+
+
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>

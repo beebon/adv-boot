@@ -1,0 +1,33 @@
+package {{cfg['package']}}.{{cfg['bizDir']}}.service.impl;
+
+import {{cfg['package']}}.{{cfg['bizDir']}}.entity.{{m['name']}};
+import {{cfg['package']}}.{{cfg['bizDir']}}.mapper.{{m['name']}}Mapper;
+import {{cfg['package']}}.{{cfg['bizDir']}}.service.I{{m['name']}}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @Title: {{m['name']}} servcie implement
+ * @Description: {{m['comment']}}
+ * @author： {{cfg.author}}
+ * @date：   {{common.now}}
+ * @version： {{cfg.version}}
+ */
+@Service
+public class {{m['name']}}ServiceImpl extends ServiceImpl<{{m['name']}}Mapper, {{m['name']}}> implements I{{m['name']}}Service {
+    @Autowired
+    {{m['name']}}Mapper dao;
+
+    @Override
+    public Map<String, Object> listInPage(Map<String, Object> param) {
+        Map<String,Object> result = new HashMap();
+        result.put("list",dao.listInPage(param));
+        param.put("totalCount","true");
+        result.put("total",Integer.parseInt(dao.listInPage(param).get(0).toString().split("=")[1].replace("}","")));
+        return result;
+    }
+}
