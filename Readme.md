@@ -17,7 +17,7 @@
     
   * 安装redis: 安装并使用默认配置，如有需有请自行修改application.yml中的redis连接配置
 
-  * 启动后台：在boot目录上执行终端命令 mvn spring-boot:run，启动后可正常访问http://localhost:8168/adv-boot/swagger-ui.htm
+  * 启动后台：在boot目录上执行终端命令 mvn spring-boot:run，启动后可正常访问http://localhost:8168/adv-boot/swagger-ui.html
     
     注：关于maven启动入口可参考 https://blog.csdn.net/qbg19881206/article/details/19850857 ,适用单元测试
     
