@@ -1,0 +1,14 @@
+from sqlalchemy import Column {% for item in m['cols'] %},{{ item['type']|importName }}{% endfor %}
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+# 定义{{m['name']}}对象:
+class {{m['name']}}(Base):
+    # 表的名字:
+    __tablename__ = '{{m['table']}}'
+
+    # 表的结构:
+    {% for item in m['cols'] %}
+    {{item['name']}} = Column({{ item['type']|getType}} {% if item['name'] in m['pk'] %},primary_key=True{% endif %})
+    {% endfor %}
