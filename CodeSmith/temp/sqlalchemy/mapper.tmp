@@ -1,0 +1,46 @@
+#获取{{m['name']}}对象
+get{{m['name']}} = """
+    select {% for item in m['cols'] %}t.{{ item['name']}} as {{ item['name'] }}{% if not loop.last %},{% endif %}{% endfor %} from {{m['table']}} t
+where 1=1
+   {% for item in m['pk'] %}
+   and {{item}} = '{% raw %}{{{% endraw %}{{item}}{% raw %}}}{% endraw %}'
+   {% endfor %}
+limit 1 
+"""
+
+#查询{{m['name']}}列表
+query{{m['name']}} = """
+    select {% for item in m['cols'] %}t.{{ item['name']}} as {{ item['name'] }}{% if not loop.last %},{% endif %}{% endfor %} from {{m['table']}} t
+    where 1=1
+   {% for item in m['cols'] %}
+    {% raw %}{{% endraw %}% if {{ item['name'] }} %{% raw %}}{% endraw %}and {{ item['name']}}='{% raw %}{{{% endraw %} {{ item['name'] }} {% raw %}}}{% endraw %}'{% raw %}{{% endraw %}% endif %{% raw %}}{% endraw %}
+   {% endfor %}
+"""
+
+#新增{{m['name']}}对象
+save{{m['name']}} = """
+   insert into {{m['table']}} ({% for item in m['cols'] %}{{ item['name']}}{% if not loop.last %},{% endif %}{% endfor %})
+   values({% for item in m['cols'] %}{% raw %}'{{{% endraw %} {{ item['name']}} {% raw %}}}'{% endraw %}{% if not loop.last %},{% endif %}{% endfor %})
+"""
+
+#更新{{m['name']}}对象
+update{{m['name']}} = """
+    update {{m['table']}}
+    set {% for item in m['cols'] %}{{ item['name']}} = {% raw %}'{{{% endraw %} {{ item['name'] }} {% raw %}}}'{% endraw %}{% if not loop.last %},{% endif %}{% endfor %}
+where 1=1
+   {% for item in m['pk'] %}
+   and {{item}} = '{% raw %}{{{% endraw %}{{item}}{% raw %}}}{% endraw %}'
+   {% endfor %}
+"""    
+    
+#删除{{m['name']}}对象
+del{{m['name']}} = """
+    delete {{m['table']}}
+where 1=1
+   {% for item in m['pk'] %}
+   and {{item}} = '{% raw %}{{{% endraw %}{{item}}{% raw %}}}{% endraw %}'
+   {% endfor %}
+"""
+
+#先删除后更新{{m['name']}}对象
+updateAll = [del{{m['name']}},save{{m['name']}}]
