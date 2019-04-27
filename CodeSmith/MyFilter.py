@@ -28,8 +28,16 @@ def getFieldMapType(value): #获取字段数据库类型与java数据类型映�
             'VARCHAR': 'java.lang.String'
     }.get(value,'java.lang.String') 
 
+def importName(v): #获取引入字段类型名称
+    return str(v).split(' ')[0].split("(")[0]
+
+def getType(v):
+    return str(v).split(' ')[0]
+
 #注册filter(******切记定义完要在此注册，否则将不生效*******)
 jinja2.filters.FILTERS['smallCamel'] = smallCamel
 jinja2.filters.FILTERS['bigCamel'] = bigCamel
 jinja2.filters.FILTERS['getFieldType'] = getFieldType
 jinja2.filters.FILTERS['getFieldMapType'] = getFieldMapType
+jinja2.filters.FILTERS['importName'] = importName
+jinja2.filters.FILTERS['getType'] = getType
