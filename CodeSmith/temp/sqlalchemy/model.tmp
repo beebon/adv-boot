@@ -1,4 +1,4 @@
-from sqlalchemy import Column {% for item in m['cols'] %},{{ item['type']|importName }}{% endfor %}
+from sqlalchemy import Column {{ m['cols']|importName }}
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -9,5 +9,5 @@ class {{m['name']}}(Base):
     __tablename__ = '{{m['table']}}'
 
     # 表的结构:
-    {% for item in m['cols'] %}{{item['name']}} = Column({{ item['type']|getType}}{% if item['name'] in m['pk'] %},primary_key=True{% endif %})
+    {% for item in m['cols'] %}{{item['name']}} = Column({{ item['type']|getType}}{% if item['name'] in m['pk'] %},primary_key=True{% endif %})  #{{item['comment']}}
     {% endfor %}
