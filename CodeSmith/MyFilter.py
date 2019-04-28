@@ -28,8 +28,13 @@ def getFieldMapType(value): #获取字段数据库类型与java数据类型映�
             'VARCHAR': 'java.lang.String'
     }.get(value,'java.lang.String') 
 
-def importName(v): #获取引入字段类型名称
-    return str(v).split(' ')[0].split("(")[0]
+def importName(cols): #获取引入字段类型名称
+    li = [str(item['type']).split(' ')[0].split("(")[0] for item in cols]
+    li=list(set(li))
+    s = ""
+    for v in li:
+        s += "," + v
+    return s
 
 def getType(v):
     return str(v).split(' ')[0]
