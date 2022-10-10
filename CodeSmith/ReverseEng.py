@@ -21,9 +21,9 @@ def getTableDesc():
     for e in engs:
         insp = reflection.Inspector.from_engine(e)
         for t in insp.get_table_names():
-            desc.append({'table':t,'comment':insp.get_table_comment(t),'name':t.title().replace('_','').replace('-',''),'pk':insp.get_primary_keys(t),'fk':insp.get_foreign_keys(t),'cols':insp.get_columns(t),'type':'table'})
+            desc.append({'table':t,'comment':insp.get_table_comment(t),'name':t.title().replace('_','').replace('-',''),'pk':insp.get_primary_keys(t) if hasattr(insp,'get_primary_keys') else '','fk':insp.get_foreign_keys(t) if hasattr(insp,'get_foreign_keys') else '','cols':insp.get_columns(t),'type':'table'})
             if c.cfg['echo'] : print('get tables for',t)
         for t in insp.get_view_names():
-            desc.append({'table':t,'comment':insp.get_table_comment(t),'name':t.title().replace('_','').replace('-',''),'pk':insp.get_primary_keys(t),'fk':insp.get_foreign_keys(t),'cols':insp.get_columns(t),'type':'view'})
+            desc.append({'table':t,'comment':insp.get_table_comment(t),'name':t.title().replace('_','').replace('-',''),'pk':insp.get_primary_keys(t) if hasattr(insp,'get_primary_keys') else '','fk':insp.get_foreign_keys(t) if hasattr(insp,'get_foreign_keys') else '','cols':insp.get_columns(t),'type':'view'})
             if c.cfg['echo'] : print('get views for',t)
     return desc
