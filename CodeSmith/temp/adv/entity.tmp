@@ -1,4 +1,4 @@
-package org.adv.modules.app.entity;
+package {{cfg['package']}}.{{cfg['bizDir']}}.entity;
 
 import java.io.Serializable;
 import com.baomidou.mybatisplus.annotation.IdType;
