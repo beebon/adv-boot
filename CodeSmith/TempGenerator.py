@@ -14,6 +14,7 @@ def gen(config=cfg):
     common = {'now':now} #通用参数，可根据需要扩展
  
     for m in models:
+        if 'models' in config.keys() and config['models'] is not None and m['name'] not in config['models'] : continue
         parm = {'m':m,'cfg':cfg.config,'common':common} #供模板调用，其中m表示数据库反射信息，cfg表示模板配置信息
         for tmp in config['temp_arr']:
             tp = tmp.split(':')
@@ -36,7 +37,7 @@ def gen(config=cfg):
             
             try:
                 #加载模板内容
-                temp_cont = open(tmp_path,encoding='utf-8').read( )
+                temp_cont = open(tmp_path,encoding='utf-8').read()
                 t = Template(temp_cont)
                 #生成输出文件 
                 fo = open(file_path, "w+",encoding='utf-8')
