@@ -9,5 +9,6 @@ config = {
     ,'temp_dir':'temp/adv' #模板目录，若需自定义模板，可复制该目录模板自行修改
     ,'temp_arr': #模板生成规则：包名:后缀:文件类型:前缀:扩展参数
         ['entity:','controller:Controller','service:Service::I','serviceImpl:ServiceImpl','mapper:Mapper','mapperXml:Mapper:xml','vueList:List:vue','vueModal:Modal:vue']
+    #,'models':['Notify']
     ,'output' : 'output/example'
 }
