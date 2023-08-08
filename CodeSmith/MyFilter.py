@@ -28,6 +28,18 @@ def getFieldMapType(value): #获取字段数据库类型与java数据类型映�
             'VARCHAR': 'java.lang.String'
     }.get(value,'java.lang.String') 
 
+def getFieldMapType4go(value): #获取字段数据库类型与go数据类型映射
+    value = re.sub(re.compile(r'\(.*\)'),'',str(value))
+    return {
+            'BIGINT': 'int',
+            'INTEGER': 'int',
+            'DECIMAL': 'int',
+            'TINYINT': 'int',
+            'DATE':'time.Time',
+            'DATETIME':'time.Time',
+            'VARCHAR': 'string'
+    }.get(value,'string') 
+
 def importName(cols): #获取引入字段类型名称
     li = [str(item['type']).split(' ')[0].split("(")[0] for item in cols]
     li=list(set(li))
@@ -44,5 +56,6 @@ jinja2.filters.FILTERS['smallCamel'] = smallCamel
 jinja2.filters.FILTERS['bigCamel'] = bigCamel
 jinja2.filters.FILTERS['getFieldType'] = getFieldType
 jinja2.filters.FILTERS['getFieldMapType'] = getFieldMapType
+jinja2.filters.FILTERS['getFieldMapType4go'] = getFieldMapType4go
 jinja2.filters.FILTERS['importName'] = importName
 jinja2.filters.FILTERS['getType'] = getType
