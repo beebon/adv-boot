@@ -23,7 +23,7 @@ def gen(config=cfg):
             tmp_path = '{0}/{1}.tmp'.format(config['temp_dir'],tp[0])
             #out_path = config['output'] + '/' + m['table'] + tp[1] + '.java'
             out_path = '{0}/{1}/'.format(config['output'],tp[0]) 
-            file_name = '{3}{0}{1}.{2}'.format(m['name'],tp[1],file_type,prefix)
+            file_name = '{3}{0}{1}.{2}'.format(m['name'],tp[1],file_type,prefix) if not config['use_table_name'] else '{0}.{1}'.format(m['table'],file_type)
             file_path = '{0}{1}'.format(out_path,file_name)
             
             parm['tp'] = tp #传入部分可自定义参数以便模板扩展
